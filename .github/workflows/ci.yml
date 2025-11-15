@@ -41,6 +41,9 @@ jobs:
       - name: Install dependencies 👨🏻‍💻
         run: pnpm install --frozen-lockfile
 
+      - name: Run prepare
+        run: pnpm run dev:prepare
+
       - name: Run typecheck
         run: pnpm run typecheck
 
