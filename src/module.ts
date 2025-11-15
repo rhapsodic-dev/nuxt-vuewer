@@ -13,7 +13,7 @@ export default defineNuxtModule({
     const { resolve } = createResolver(import.meta.url)
     const runtimeDir = fileURLToPath(new URL('./runtime', import.meta.url))
 
-    _nuxt.options.build.transpile.push(runtimeDir)
+    _nuxt.options.build.transpile.push(resolve(runtimeDir))
     _nuxt.options.css.push(resolve(runtimeDir, 'assets/global.css'))
 
     addImports({
