@@ -1,0 +1,97 @@
+{
+  "name": "@rhapsodic/nuxt-vuewer",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "author": {
+    "name": "rhapsodic.dev",
+    "email": "rhapsodic.dev@gmail.com",
+    "url": "https://github.com/rhapsodic-dev"
+  },
+  "contributors": [
+    {
+      "name": "Svyatoslav Fyodorov",
+      "email": "intelrug@gmail.com",
+      "url": "https://github.com/intelrug"
+    },
+    {
+      "name": "TrenLok",
+      "email": "trenlok.dev@gmail.com",
+      "url": "https://github.com/trenlok"
+    }
+  ],
+  "description": "Nuxt module for viewing images",
+  "homepage": "https://github.com/rhapsodic-dev/nuxt-vuewer.git#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhapsodic-dev/nuxt-vuewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rhapsodic-dev/nuxt-vuewer/issues"
+  },
+  "keywords": [
+    "image",
+    "nuxt",
+    "viewer"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/module.mjs"
+    }
+  },
+  "main": "./dist/module.mjs",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepack": "nuxt-module-build build",
+    "start": "npm run dev",
+    "build": "npm run dev:build",
+    "dev": "npm run dev:prepare && nuxi dev playground --host 0.0.0.0",
+    "dev:build": "nuxi build playground",
+    "dev:generate": "nuxi generate playground",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
+    "dev:preview": "nuxi preview playground",
+    "typecheck": "nuxi typecheck playground",
+    "bumpp": "bumpp",
+    "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
+    "lint": "eslint .",
+    "format": "eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "prepare": "pnpm run hooks:install",
+    "hooks:install": "pnpm exec simple-git-hooks"
+  },
+  "dependencies": {
+    "@vueuse/core": "^14.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@nuxt/devtools": "^2.7.0",
+    "@nuxt/eslint-config": "^1.9.0",
+    "@nuxt/kit": "^4.2.1",
+    "@nuxt/module-builder": "^1.0.2",
+    "@nuxt/schema": "^4.2.1",
+    "@nuxt/test-utils": "^3.20.1",
+    "@types/node": "^24.10.1",
+    "bumpp": "^10.3.1",
+    "changelogen": "^0.6.2",
+    "eslint": "^9.38.0",
+    "lint-staged": "^16.2.6",
+    "nuxt": "^4.2.1",
+    "sass": "^1.94.0",
+    "simple-git-hooks": "^2.13.1",
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.4",
+    "vue-tsc": "^3.1.2"
+  },
+  "simple-git-hooks": {
+    "commit-msg": "pnpm exec commitlint --edit",
+    "pre-commit": "pnpm exec lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,vue}": "eslint --fix"
+  },
+  "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c"
+}
