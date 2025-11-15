@@ -82,8 +82,8 @@ npm run release
 [npm-version-src]: https://img.shields.io/npm/v/@rhapsodic/nuxt-vuewer/latest.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-version-href]: https://npmjs.com/package/@rhapsodic/nuxt-vuewer
 
-[npm-downloads-src]: https://img.shields.io/npm/dm/@rhapsodic/nuxt-vuewer.svg?style=flat&colorA=020420&colorB=00DC82
+[npm-downloads-src]: https://img.shields.io/npm/dm/@rhapsodic/nuxt-vuewer?style=flat&colorA=020420&colorB=00DC82
 [npm-downloads-href]: https://npm.chart.dev/@rhapsodic/nuxt-vuewer
 
-[license-src]: https://img.shields.io/npm/l/@rhapsodic/nuxt-vuewer.svg?style=flat&colorA=020420&colorB=00DC82
+[license-src]: https://img.shields.io/npm/l/@rhapsodic/nuxt-vuewer?style=flat&colorA=020420&colorB=00DC82
 [license-href]: https://npmjs.com/package/@rhapsodic/nuxt-vuewer
