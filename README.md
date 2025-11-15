@@ -10,7 +10,7 @@
 
 - 💪 &nbsp;Type safe integration of Vuewer into your project
 - ✨ &nbsp;Viewing multiple or a single image
-- 🕹️ &nbsp;A [`useVuewer()`] composable to access all of vuewer methods.
+- 🕹️ &nbsp;A `useVuewer()` composable to access all of vuewer methods.
 
 ## Quick Setup
 
