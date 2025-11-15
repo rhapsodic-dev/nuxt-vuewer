@@ -47,11 +47,8 @@ jobs:
       - name: Run typecheck
         run: pnpm run typecheck
 
-      - name: Code css style check
-        run: pnpm run lint:styles
-
-      - name: Code js style check
-        run: pnpm run lint:scripts
+      - name: Run lint
+        run: pnpm run lint
 
       - name: Run build
         run: pnpm run build
