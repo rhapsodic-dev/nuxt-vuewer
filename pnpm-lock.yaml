@@ -40,8 +40,8 @@ importers:
         specifier: ^24.10.1
         version: 24.10.1
       bumpp:
-        specifier: ^10.3.1
-        version: 10.3.1(magicast@0.5.1)
+        specifier: ^10.3.2
+        version: 10.3.2(magicast@0.5.1)
       eslint:
         specifier: ^9.39.1
         version: 9.39.1(jiti@2.6.1)
@@ -1814,8 +1814,8 @@ packages:
     resolution: {integrity: sha512-bkXY9WsVpY7CvMhKSR6pZilZu9Ln5WDrKVBUXf2S443etkmEO4V58heTecXcUIsNsi4Rx8JUO4NfX1IcQl4deg==}
     engines: {node: '>=18.20'}
 
-  bumpp@10.3.1:
-    resolution: {integrity: sha512-cOKPRFCWvHcYPJQAHN6V7Jp/wAfnyqQRXQ+2fgWIL6Gao20rpu7xQ1cGGo1APOfmbQmmHngEPg9Fy7nJ3giRkQ==}
+  bumpp@10.3.2:
+    resolution: {integrity: sha512-yUUkVx5zpTywLNX97MlrqtpanI7eMMwFwLntWR2EBVDw3/Pm3aRIzCoDEGHATLIiHK9PuJC7xWI4XNWqXItSPg==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1827,6 +1827,14 @@ packages:
     resolution: {integrity: sha512-LcWQ01LT9tkoUINHgpIOv3mMs+Abv7oVCrtpMRi1PaapVEpWoMga5WuT7/DqFTu7URP9ftbOmimNw1KNIGh9DQ==}
     peerDependencies:
       magicast: ^0.3.5
+    peerDependenciesMeta:
+      magicast:
+        optional: true
+
+  c12@3.3.2:
+    resolution: {integrity: sha512-QkikB2X5voO1okL3QsES0N690Sn/K9WokXqUsDQsWy5SnYb+psYQFGA10iy1bZHj3fjISKsI67Q90gruvWWM3A==}
+    peerDependencies:
+      magicast: '*'
     peerDependenciesMeta:
       magicast:
         optional: true
@@ -2429,6 +2437,9 @@ packages:
 
   exsolve@1.0.7:
     resolution: {integrity: sha512-VO5fQUzZtI6C+vx4w/4BWJpg3s/5l+6pRQEHzFRM8WFi4XffSP1Z+4qi7GbjWbvRQEbdIco5mIMq+zX4rPuLrw==}
+
+  exsolve@1.0.8:
+    resolution: {integrity: sha512-LmDxfWXwcTArk8fUEnOfSZpHOJ6zOMUJKOtFLFqJLoKJetuQG874Uc7/Kki7zFLzYybmZhp1M7+98pfMqeX8yA==}
 
   fake-indexeddb@6.2.4:
     resolution: {integrity: sha512-INKeIKEtSViN4yVtEWEUqbsqmaIy7Ls+MfU0yxQVXg67pOJ/sH1ZxcVrP8XrKULUFohcPD9gnmym+qBfEybACw==}
@@ -4107,6 +4118,10 @@ packages:
 
   tinyexec@1.0.1:
     resolution: {integrity: sha512-5uC6DDlmeqiOwCPmK9jMSdOuZTh8bU39Ys6yidB+UTt5hfZUPGAypSgFRiEp+jbi9qH40BLDvy85jIU88wKSqw==}
+
+  tinyexec@1.0.2:
+    resolution: {integrity: sha512-W/KYk+NFhkmsYpuHq5JykngiOCnxeVL8v8dFnqxSD8qEEdRfXk1SDM6JzNqcERbcGYj9tMrDQBYV9cjgnunFIg==}
+    engines: {node: '>=18'}
 
   tinyglobby@0.2.15:
     resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
@@ -6560,17 +6575,17 @@ snapshots:
 
   builtin-modules@5.0.0: {}
 
-  bumpp@10.3.1(magicast@0.5.1):
+  bumpp@10.3.2(magicast@0.5.1):
     dependencies:
       ansis: 4.2.0
       args-tokenizer: 0.3.0
-      c12: 3.3.1(magicast@0.5.1)
+      c12: 3.3.2(magicast@0.5.1)
       cac: 6.7.14
       escalade: 3.2.0
       jsonc-parser: 3.3.1
       package-manager-detector: 1.5.0
       semver: 7.7.3
-      tinyexec: 1.0.1
+      tinyexec: 1.0.2
       tinyglobby: 0.2.15
       yaml: 2.8.1
     transitivePeerDependencies:
@@ -6587,6 +6602,23 @@ snapshots:
       defu: 6.1.4
       dotenv: 17.2.3
       exsolve: 1.0.7
+      giget: 2.0.0
+      jiti: 2.6.1
+      ohash: 2.0.11
+      pathe: 2.0.3
+      perfect-debounce: 2.0.0
+      pkg-types: 2.3.0
+      rc9: 2.1.2
+    optionalDependencies:
+      magicast: 0.5.1
+
+  c12@3.3.2(magicast@0.5.1):
+    dependencies:
+      chokidar: 4.0.3
+      confbox: 0.2.2
+      defu: 6.1.4
+      dotenv: 17.2.3
+      exsolve: 1.0.8
       giget: 2.0.0
       jiti: 2.6.1
       ohash: 2.0.11
@@ -7212,6 +7244,8 @@ snapshots:
   expect-type@1.2.2: {}
 
   exsolve@1.0.7: {}
+
+  exsolve@1.0.8: {}
 
   fake-indexeddb@6.2.4: {}
 
@@ -9034,6 +9068,8 @@ snapshots:
   tinyexec@0.3.2: {}
 
   tinyexec@1.0.1: {}
+
+  tinyexec@1.0.2: {}
 
   tinyglobby@0.2.15:
     dependencies:
