@@ -64,7 +64,7 @@ importers:
         specifier: ^4.0.16
         version: 4.0.17(@types/node@24.10.1)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2)
       vue-tsc:
-        specifier: ^3.2.1
+        specifier: ^3.2.2
         version: 3.2.2(typescript@5.9.3)
 
 packages:
@@ -4356,6 +4356,7 @@ packages:
   tar@7.5.2:
     resolution: {integrity: sha512-7NyxrTE4Anh8km8iEy7o0QYPs+0JKBTj5ZaqHg6B39erLg0qYXN3BijtShwbsNSvQ+LN75+KV+C4QR/f6Gwnpg==}
     engines: {node: '>=18'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exhorbitant rates) by contacting i@izs.me
 
   terser@5.44.0:
     resolution: {integrity: sha512-nIVck8DK+GM/0Frwd+nIhZ84pR/BX7rmXMfYwyg+Sri5oGVE99/E3KvXqpC2xHFxyqXyGHTKBSioxxplrO4I4w==}
@@ -6819,8 +6820,8 @@ snapshots:
   '@vue/language-core@3.2.2':
     dependencies:
       '@volar/language-core': 2.4.27
-      '@vue/compiler-dom': 3.5.24
-      '@vue/shared': 3.5.24
+      '@vue/compiler-dom': 3.5.26
+      '@vue/shared': 3.5.26
       alien-signals: 3.0.5
       muggle-string: 0.4.1
       path-browserify: 1.0.1
