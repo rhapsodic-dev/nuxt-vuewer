@@ -78,7 +78,7 @@
     "eslint": "^9.39.2",
     "lint-staged": "^16.2.7",
     "nuxt": "^4.2.2",
-    "sass": "^1.97.1",
+    "sass": "^1.97.2",
     "simple-git-hooks": "^2.13.1",
     "typescript": "~5.9.3",
     "vitest": "^4.0.16",
