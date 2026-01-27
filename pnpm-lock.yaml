@@ -61,7 +61,7 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^4.0.16
+        specifier: ^4.0.17
         version: 4.0.17(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2)
       vue-tsc:
         specifier: ^3.2.2
@@ -4664,46 +4664,6 @@ packages:
       vite: ^6.0.0 || ^7.0.0
       vue: ^3.5.0
 
-  vite@7.2.2:
-    resolution: {integrity: sha512-BxAKBWmIbrDgrokdGZH1IgkIk/5mMHDreLDmCJ0qpyJaAteP8NvMhkwr/ZCQNqNH97bw/dANTE9PDzqwJghfMQ==}
-    engines: {node: ^20.19.0 || >=22.12.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^20.19.0 || >=22.12.0
-      jiti: '>=1.21.0'
-      less: ^4.0.0
-      lightningcss: ^1.21.0
-      sass: ^1.70.0
-      sass-embedded: ^1.70.0
-      stylus: '>=0.54.8'
-      sugarss: ^5.0.0
-      terser: ^5.16.0
-      tsx: ^4.8.1
-      yaml: ^2.4.2
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      jiti:
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      sass-embedded:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-      tsx:
-        optional: true
-      yaml:
-        optional: true
-
   vite@7.3.1:
     resolution: {integrity: sha512-w+N7Hifpc3gRjZ63vYBXA56dvvRlNWRczTdmCBBa+CotUzAPf5b7YMdMR/8CQoeYE5LX3W4wj6RYTgonm1b9DA==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -6649,13 +6609,13 @@ snapshots:
       chai: 6.2.1
       tinyrainbow: 3.0.3
 
-  '@vitest/mocker@4.0.17(vite@7.2.2(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2))':
+  '@vitest/mocker@4.0.17(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2))':
     dependencies:
       '@vitest/spy': 4.0.17
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 7.2.2(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2)
+      vite: 7.3.1(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2)
 
   '@vitest/pretty-format@4.0.17':
     dependencies:
@@ -9906,23 +9866,6 @@ snapshots:
       vite: 7.3.1(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2)
       vue: 3.5.26(typescript@5.9.3)
 
-  vite@7.2.2(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2):
-    dependencies:
-      esbuild: 0.25.12
-      fdir: 6.5.0(picomatch@4.0.3)
-      picomatch: 4.0.3
-      postcss: 8.5.6
-      rollup: 4.52.5
-      tinyglobby: 0.2.15
-    optionalDependencies:
-      '@types/node': 24.10.9
-      fsevents: 2.3.3
-      jiti: 2.6.1
-      sass: 1.97.2
-      sass-embedded: 1.93.3
-      terser: 5.44.0
-      yaml: 2.8.2
-
   vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2):
     dependencies:
       esbuild: 0.27.2
@@ -9961,7 +9904,7 @@ snapshots:
   vitest@4.0.17(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2):
     dependencies:
       '@vitest/expect': 4.0.17
-      '@vitest/mocker': 4.0.17(vite@7.2.2(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2))
+      '@vitest/mocker': 4.0.17(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2))
       '@vitest/pretty-format': 4.0.17
       '@vitest/runner': 4.0.17
       '@vitest/snapshot': 4.0.17
@@ -9978,7 +9921,7 @@ snapshots:
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vite: 7.2.2(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2)
+      vite: 7.3.1(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.2)(terser@5.44.0)(yaml@2.8.2)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 24.10.9
