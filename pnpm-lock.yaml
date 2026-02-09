@@ -64,7 +64,7 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.3)(terser@5.44.0)(yaml@2.8.2)
       vue-tsc:
-        specifier: ^3.2.3
+        specifier: ^3.2.4
         version: 3.2.4(typescript@5.9.3)
 
 packages:
@@ -7179,8 +7179,8 @@ snapshots:
   '@vue/language-core@3.2.4':
     dependencies:
       '@volar/language-core': 2.4.27
-      '@vue/compiler-dom': 3.5.26
-      '@vue/shared': 3.5.26
+      '@vue/compiler-dom': 3.5.27
+      '@vue/shared': 3.5.27
       alien-signals: 3.0.5
       muggle-string: 0.4.1
       path-browserify: 1.0.1
