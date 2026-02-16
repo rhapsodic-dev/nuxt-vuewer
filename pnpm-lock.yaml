@@ -13,10 +13,10 @@ importers:
         version: 14.2.1(vue@3.5.27(typescript@5.9.3))
     devDependencies:
       '@commitlint/cli':
-        specifier: ^20.4.0
+        specifier: ^20.4.1
         version: 20.4.1(@types/node@24.10.9)(typescript@5.9.3)
       '@commitlint/config-conventional':
-        specifier: ^20.4.0
+        specifier: ^20.4.1
         version: 20.4.1
       '@nuxt/devtools':
         specifier: ^3.1.1
