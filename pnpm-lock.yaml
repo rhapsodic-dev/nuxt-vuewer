@@ -37,7 +37,7 @@ importers:
         specifier: ^3.23.0
         version: 3.23.0(magicast@0.5.1)(typescript@5.9.3)(vitest@4.0.18(@types/node@24.10.13)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.97.3)(terser@5.44.0)(yaml@2.8.2))
       '@types/node':
-        specifier: ^24.10.10
+        specifier: ^24.10.12
         version: 24.10.13
       bumpp:
         specifier: ^10.4.1
