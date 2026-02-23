@@ -67,10 +67,6 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(typescript@5.9.3)
 
-  playground: {}
-
-  test/fixtures/basic: {}
-
 packages:
 
   '@antfu/install-pkg@1.1.0':
