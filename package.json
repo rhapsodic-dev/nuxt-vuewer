@@ -65,8 +65,8 @@
     "@vueuse/core": "^14.2.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.4.1",
-    "@commitlint/config-conventional": "^20.4.1",
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
     "@nuxt/devtools": "^3.2.1",
     "@nuxt/eslint-config": "^1.15.1",
     "@nuxt/kit": "^4.3.1",
