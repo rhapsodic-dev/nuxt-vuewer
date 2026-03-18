@@ -31,14 +31,28 @@ const emit = defineEmits<VuewerButtonEmits>()
   &_side {
     &_left {
       left: 0;
-      padding-right: 120px;
-      padding-left: 20px;
+      padding-right: 48px;
+      padding-left: 12px;
     }
 
     &_right {
       right: 0;
-      padding-right: 20px;
-      padding-left: 120px;
+      padding-right: 12px;
+      padding-left: 48px;
+    }
+  }
+
+  @media (min-width: 769px) {
+    &_side {
+      &_left {
+        padding-right: 120px;
+        padding-left: 20px;
+      }
+
+      &_right {
+        padding-right: 20px;
+        padding-left: 120px;
+      }
     }
   }
 }
