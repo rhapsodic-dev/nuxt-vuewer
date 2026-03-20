@@ -23,13 +23,12 @@ const emit = defineEmits<VuewerButtonEmits>()
   color: white;
   font-size: 16px;
   cursor: pointer;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.35);
   border: 0;
   border-radius: 50%;
   outline: none;
   transition: background 0.2s ease;
   transform: translateY(-50%);
-  filter: drop-shadow(0px 0px 11px #000000);
 
   &:deep(svg) {
     min-width: auto;
@@ -37,7 +36,7 @@ const emit = defineEmits<VuewerButtonEmits>()
 
   &:hover,
   &:focus-visible {
-    background: rgb(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.50);
   }
 }
 </style>
