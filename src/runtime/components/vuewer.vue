@@ -94,6 +94,7 @@ import IconAngleRight from './icons/angle-right.vue'
 import VuewerZoomControls from './zoom/controls/controls.vue'
 import { useVuewerZoom } from '../composables/zoom'
 import { useVuewerPan } from '../composables/pan'
+import { useSwipeNavigation } from '../composables/swipe-navigation'
 import { useWheelZoomTuning } from '../composables/wheel-zoom-tuning'
 import { useWheelScrollTuning } from '../composables/wheel-scroll-tuning'
 
@@ -159,20 +160,53 @@ const {
   isImageDragging,
   isImagePannable,
   onImageLoad: onActiveImageLoad,
-  onViewerPointerDown,
-  onViewerPointerMove,
-  onViewerPointerUp,
-  onViewerPointerCancel,
+  onViewerPointerDown: onPanPointerDown,
+  onViewerPointerMove: onPanPointerMove,
+  onViewerPointerUp: onPanPointerUp,
+  onViewerPointerCancel: onPanPointerCancel,
   resetPan,
 } = useVuewerPan({
   viewerRef,
   imageRef: activeImageRef,
   imageScale,
 })
+
+const {
+  onViewerPointerDown: onSwipePointerDown,
+  onViewerPointerMove: onSwipePointerMove,
+  onViewerPointerUp: onSwipePointerUp,
+  onViewerPointerCancel: onSwipePointerCancel,
+} = useSwipeNavigation({
+  viewerRef,
+  imageRef: activeImageRef,
+  isSwipeEnabled: computed(() => !isImagePannable.value),
+  onSwipeLeft: () => goToNextImage(),
+  onSwipeRight: () => goToPrevImage(),
+})
 // Bridge zoom scale events to pan logic.
 // This keeps zoom centered around the active pointer/touch location
 // instead of always zooming around the viewport center.
 setOnScaleChange(onScaleChange)
+
+function onViewerPointerDown(event: PointerEvent): void {
+  onPanPointerDown(event)
+  onSwipePointerDown(event)
+}
+
+function onViewerPointerMove(event: PointerEvent): void {
+  onPanPointerMove(event)
+  onSwipePointerMove(event)
+}
+
+function onViewerPointerUp(event: PointerEvent): void {
+  onPanPointerUp(event)
+  onSwipePointerUp(event)
+}
+
+function onViewerPointerCancel(event: PointerEvent): void {
+  onPanPointerCancel(event)
+  onSwipePointerCancel(event)
+}
 
 function resetScale(): void {
   resetZoomScale()
