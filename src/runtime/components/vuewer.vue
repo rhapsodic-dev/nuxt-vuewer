@@ -1,6 +1,7 @@
 <template>
   <div
     v-bind="attrs"
+    ref="viewerRef"
     class="vuewer"
     :class="{ vuewer_hide_ui: idle }"
     @click.self="emit('close')"
@@ -35,29 +36,36 @@
       <VuewerCloseButton @click="emit('close')" />
     </div>
 
-    <div
-      v-if="images.length > 1"
-      class="vuewer__images"
-    >
-      <VuewerCarousel
-        :active-item-id="currentImage?.id"
-      >
-        <template
-          v-for="[key, image] in imagesMap"
-          :key="key"
-        >
-          <VuewerCarouselItem
-            :is-active="image.id === currentImage?.id"
-            @click="setActiveImage(image.id)"
-          >
-            <img
-              :src="image.url"
-              alt=""
-            >
-          </VuewerCarouselItem>
+    <template v-if="hasNonInitialZoom || images.length > 1">
+      <div class="vuewer__navigation">
+        <template v-if="hasNonInitialZoom">
+          <VuewerZoomControls
+            :zoom-percentage="zoomPercentage"
+            @reset="resetScale"
+          />
         </template>
-      </VuewerCarousel>
-    </div>
+        <template v-if="images.length > 1">
+          <div class="vuewer__images">
+            <VuewerCarousel :active-item-id="currentImage?.id">
+              <template
+                v-for="[key, image] in imagesMap"
+                :key="key"
+              >
+                <VuewerCarouselItem
+                  :is-active="image.id === currentImage?.id"
+                  @click="setActiveImage(image.id)"
+                >
+                  <img
+                    :src="image.url"
+                    alt=""
+                  >
+                </VuewerCarouselItem>
+              </template>
+            </VuewerCarousel>
+          </div>
+        </template>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -71,6 +79,10 @@ import VuewerCarousel from './carousel/carousel.vue'
 import VuewerCarouselItem from './carousel/item/item.vue'
 import IconAngleLeft from './icons/angle-left.vue'
 import IconAngleRight from './icons/angle-right.vue'
+import VuewerZoomControls from './zoom/controls/controls.vue'
+import { useVuewerZoom } from '../composables/zoom'
+import { useWheelZoomTuning } from '../composables/wheel-zoom-tuning'
+import { useWheelScrollTuning } from '../composables/wheel-scroll-tuning'
 
 import type { VuewerProps, VuewerEmits } from '.'
 
@@ -105,8 +117,27 @@ const defaultImage = computed(() => {
   return imagesMap.value.values().next().value
 })
 
+const viewerRef = ref<HTMLElement | null>(null)
 const currentImage = ref<ImageItem>()
-const imageScale = ref(1)
+const {
+  imageScale,
+  handleScale,
+  resetScale,
+} = useVuewerZoom({
+  zoomableElementRef: viewerRef,
+})
+
+const { handleWheelZoom } = useWheelZoomTuning({
+  onScale: handleScale,
+})
+
+const { handleWheelScroll, resetWheelScrollState } = useWheelScrollTuning({
+  onScrollDown: () => goToNextImage(),
+  onScrollUp: () => goToPrevImage(),
+})
+
+const hasNonInitialZoom = computed(() => Math.abs(imageScale.value - 1) > 0.001)
+const zoomPercentage = computed(() => Math.round(imageScale.value * 100))
 
 function setActiveImage(imageId: number) {
   const image = imagesMap.value.get(imageId)
@@ -148,26 +179,6 @@ const imageViewerKeyboardActions: Record<ImageViewerKeyboardActions, () => void>
   arrowright: () => onArrow('right'),
 }
 
-function handleScale(delta: number) {
-  const MIN_SCALE = 0.3
-  const MAX_SCALE = 10
-
-  let newScale = imageScale.value + delta
-
-  if (newScale < MIN_SCALE) {
-    newScale = MIN_SCALE
-  }
-  else if (newScale > MAX_SCALE) {
-    newScale = MAX_SCALE
-  }
-
-  imageScale.value = Math.round(newScale * 100) / 100
-}
-
-function resetScale(): void {
-  imageScale.value = 1
-}
-
 function onKeyDown(event: KeyboardEvent): void {
   const keyCode = event.key.toLowerCase() as ImageViewerKeyboardActions
 
@@ -191,50 +202,22 @@ function onArrow(direction: 'left' | 'right') {
   }
 }
 
-type HandleScaleFn = (value: number) => void
-type GoToNextImageFn = () => void
-type GoToPrevImageFn = () => void
+function onWheel(event: WheelEvent): void {
+  event.preventDefault()
 
-interface OnWheelConfig {
-  onScale: HandleScaleFn
-  onNextImage: GoToNextImageFn
-  onPrevImage: GoToPrevImageFn
-}
-
-function createOnWheelHandler(config: OnWheelConfig) {
-  const { onScale, onPrevImage, onNextImage } = config
-
-  return function onWheel(event: WheelEvent): void {
-    event.preventDefault()
-
-    const { deltaY, ctrlKey } = event
-
-    const SCROLL_UP = -1
-    const SCROLL_DOWN = 1
-    const SCALE_FACTOR = 0.35
-
-    const scrollDirection = Math.sign(deltaY)
-
-    if (ctrlKey) {
-      const scaleAmount = scrollDirection === SCROLL_UP ? SCALE_FACTOR : -SCALE_FACTOR
-      onScale(scaleAmount)
-      return
-    }
-
-    if (scrollDirection === SCROLL_DOWN) {
-      onNextImage()
-    }
-    else if (scrollDirection === SCROLL_UP) {
-      onPrevImage()
-    }
+  if (event.ctrlKey) {
+    resetWheelScrollState()
+    handleWheelZoom(event)
+    return
   }
-}
 
-const onWheelHandler = createOnWheelHandler({
-  onScale: delta => handleScale(delta),
-  onNextImage: () => goToNextImage(),
-  onPrevImage: () => goToPrevImage(),
-})
+  if (props.images.length <= 1) {
+    resetWheelScrollState()
+    return
+  }
+
+  handleWheelScroll(event)
+}
 
 watch(imagesMap, (newMap) => {
   currentImage.value ??= defaultImage.value
@@ -246,12 +229,12 @@ watch(imagesMap, (newMap) => {
 
 onMounted(() => {
   globalThis.addEventListener('keydown', onKeyDown)
-  globalThis.addEventListener('wheel', onWheelHandler, { passive: false })
+  globalThis.addEventListener('wheel', onWheel, { passive: false })
 })
 
 onBeforeUnmount(() => {
   globalThis.removeEventListener('keydown', onKeyDown)
-  globalThis.removeEventListener('wheel', onWheelHandler)
+  globalThis.removeEventListener('wheel', onWheel)
 })
 </script>
 
@@ -264,6 +247,10 @@ onBeforeUnmount(() => {
   inset: 0;
   z-index: 1000;
   user-select: none;
+  /* Keep native touch gestures from competing with custom viewer zoom/pan. */
+  touch-action: none;
+  /* Prevent scroll chaining/bounce from leaking to the background page. */
+  overscroll-behavior: contain;
 
   & img {
     width: auto;
@@ -299,14 +286,24 @@ onBeforeUnmount(() => {
     transition: opacity .3s;
   }
 
-  &__images {
+  &__navigation {
     position: absolute;
     left: 50%;
     bottom: 25px;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
     opacity: var(--vuewer__ui_opacity);
     transition: opacity .3s;
     transform: translateX(-50%);
+  }
+
+  &__images {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__nav-button {
