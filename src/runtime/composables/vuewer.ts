@@ -9,11 +9,12 @@ import {
   onUnmounted,
   computed,
 } from 'vue'
+import type { VuewerImage } from '../components'
 
 import Vuewer from '../components/vuewer.vue'
 
 export interface UseVuewerOptions {
-  images: string[]
+  images: VuewerImage[]
   defaultIndex?: number
   onSelect?: (index: number) => void
 }

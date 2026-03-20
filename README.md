@@ -27,9 +27,15 @@ That's it! You can now use Vuewer in your Nuxt app ✨
 <script setup>
 const { open, close, isOpened } = useVuewer({
   images: [
-    'https://placehold.net/2.png',
+    {
+      url: 'https://placehold.net/2.png',
+      thumbUrl: 'https://placehold.net/2-240x160.png',
+    },
     'https://placehold.net/5-600x800.png',
-    'https://placehold.net/7-600x800.png',
+    {
+      url: 'https://placehold.net/7-600x800.png',
+      thumbUrl: 'https://placehold.net/7-240x160.png',
+    },
   ],
 })
 
@@ -46,6 +52,9 @@ watch(isOpened, (newState) => {
   </div>
 </template>
 ```
+
+`images` supports both raw strings and objects with thumbnail overrides:
+`string | { url: string, thumbUrl?: string }`.
 
 
 ## Development

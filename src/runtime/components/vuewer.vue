@@ -68,7 +68,7 @@
                   @click="setActiveImage(image.id)"
                 >
                   <img
-                    :src="image.url"
+                    :src="image.thumbUrl"
                     alt=""
                   >
                 </VuewerCarouselItem>
@@ -98,11 +98,12 @@ import { useSwipeNavigation } from '../composables/swipe-navigation'
 import { useWheelZoomTuning } from '../composables/wheel-zoom-tuning'
 import { useWheelScrollTuning } from '../composables/wheel-scroll-tuning'
 
-import type { VuewerProps, VuewerEmits } from '.'
+import type { VuewerProps, VuewerEmits, VuewerImage } from '.'
 
 interface ImageItem {
   id: number
   url: string
+  thumbUrl: string
 }
 
 const props = withDefaults(defineProps<VuewerProps>(), {
@@ -114,11 +115,26 @@ const attrs = useAttrs()
 
 const { idle } = useIdle(1500)
 
+function normalizeImage(image: VuewerImage): Omit<ImageItem, 'id'> {
+  if (typeof image === 'string') {
+    return {
+      url: image,
+      thumbUrl: image,
+    }
+  }
+
+  return {
+    url: image.url,
+    thumbUrl: image.thumbUrl ?? image.url,
+  }
+}
+
 const imagesMap = computed<Map<number, ImageItem>>(() => {
   const newMap = new Map<number, ImageItem>()
-  props.images.forEach((url, index) => {
+  props.images.forEach((image, index) => {
     const imageId = index
-    newMap.set(imageId, { id: imageId, url: url })
+    const normalizedImage = normalizeImage(image)
+    newMap.set(imageId, { id: imageId, ...normalizedImage })
   })
   return newMap
 })
