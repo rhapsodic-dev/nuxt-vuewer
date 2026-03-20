@@ -1,11 +1,33 @@
 import type { Ref } from 'vue'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { clamp } from '../utils/math'
+
+export interface ZoomFocalPoint {
+  clientX: number
+  clientY: number
+}
+
+export interface ZoomScaleChange {
+  previousScale: number
+  nextScale: number
+  focalPoint?: ZoomFocalPoint
+}
 
 export interface UseVuewerZoomOptions {
   zoomableElementRef: Ref<HTMLElement | null>
   initialScale?: number
   minScale?: number
   maxScale?: number
+  /**
+   * Called whenever a scale update is applied.
+   *
+   * Consumers (for example pan logic) can use this signal to:
+   * - keep the zoom anchored to the pointer/touch focal point
+   * - recompute pan bounds for the new scale
+   *
+   * Can be replaced later via `setOnScaleChange()`.
+   */
+  onScaleChange?: (scaleChange: ZoomScaleChange) => void
   /**
    * Listener options for touch/gesture events used by zoom handling.
    * Keep `passive: false` so handlers can call `event.preventDefault()`
@@ -36,37 +58,47 @@ export function useVuewerZoom({
   initialScale = getDefaultInitialScale(),
   minScale = getDefaultMinScale(),
   maxScale = getDefaultMaxScale(),
+  onScaleChange,
   touchListenerOptions = getDefaultTouchListenerOptions(),
 }: UseVuewerZoomOptions) {
   const imageScale = ref(initialScale)
   const pinchStartDistance = ref<number | null>(null)
   const pinchStartScale = ref(initialScale)
+  const scaleChangeHandlerRef = ref<typeof onScaleChange>(onScaleChange)
 
-  function handleScale(delta: number) {
+  function handleScale(delta: number, focalPoint?: ZoomFocalPoint) {
     // Apply wheel delta as a relative change, so zoom speed feels consistent
     // across small and large scale values.
-    setScale(imageScale.value * Math.exp(delta))
+    setScale(imageScale.value * Math.exp(delta), focalPoint)
   }
 
-  function setScale(scale: number): void {
+  function setScale(scale: number, focalPoint?: ZoomFocalPoint): void {
+    const previousScale = imageScale.value
     const clampedScale = clampScale(scale)
-    imageScale.value = Math.round(clampedScale * 100) / 100
+    const nextScale = Math.round(clampedScale * 100) / 100
+
+    if (nextScale === previousScale) {
+      return
+    }
+
+    imageScale.value = nextScale
+    scaleChangeHandlerRef.value?.({
+      previousScale,
+      nextScale,
+      focalPoint,
+    })
+  }
+
+  function setOnScaleChange(
+    scaleChangeHandler: ((scaleChange: ZoomScaleChange) => void) | null,
+  ): void {
+    // Allows wiring/rewiring scale side effects (like pan synchronization)
+    // after composables are created.
+    scaleChangeHandlerRef.value = scaleChangeHandler ?? undefined
   }
 
   function clampScale(scale: number): number {
     return clamp(scale, minScale, maxScale)
-  }
-
-  function clamp(value: number, min: number, max: number): number {
-    if (value < min) {
-      return min
-    }
-
-    if (value > max) {
-      return max
-    }
-
-    return value
   }
 
   function resetScale(): void {
@@ -86,6 +118,20 @@ export function useVuewerZoom({
 
     // Euclidean distance between two touch points (used as the pinch span).
     return Math.hypot(horizontalDistance, verticalDistance)
+  }
+
+  function getTouchCenter(touches: TouchList): ZoomFocalPoint | null {
+    if (touches.length < 2) return null
+
+    const firstTouch = touches.item(0)
+    const secondTouch = touches.item(1)
+
+    if (!firstTouch || !secondTouch) return null
+
+    return {
+      clientX: (firstTouch.clientX + secondTouch.clientX) / 2,
+      clientY: (firstTouch.clientY + secondTouch.clientY) / 2,
+    }
   }
 
   function onTouchStart(event: TouchEvent): void {
@@ -109,7 +155,12 @@ export function useVuewerZoom({
     if (!distance) return
 
     const scaleFactor = distance / pinchStartDistance.value
-    setScale(pinchStartScale.value * scaleFactor)
+    const touchCenter = getTouchCenter(event.touches)
+
+    setScale(
+      pinchStartScale.value * scaleFactor,
+      touchCenter ?? undefined,
+    )
   }
 
   function onTouchEnd(event: TouchEvent): void {
@@ -174,5 +225,6 @@ export function useVuewerZoom({
     imageScale,
     handleScale,
     resetScale,
+    setOnScaleChange,
   }
 }

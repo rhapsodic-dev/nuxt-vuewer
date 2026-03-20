@@ -1,4 +1,7 @@
 import { normalizeWheelDeltaY } from '../utils/wheel-delta'
+import { clamp } from '../utils/math'
+
+import type { ZoomFocalPoint } from './zoom'
 
 /*
  * Wheel zoom feels inconsistent across devices if we use raw wheel deltas directly:
@@ -6,7 +9,7 @@ import { normalizeWheelDeltaY } from '../utils/wheel-delta'
  * This composable normalizes wheel intent into stable zoom deltas and clamps spikes.
  */
 export interface UseWheelZoomTuningOptions {
-  onScale: (delta: number) => void
+  onScale: (delta: number, focalPoint?: ZoomFocalPoint) => void
   /**
    * Controls how strong each wheel step changes zoom.
    * Increase for faster zoom, decrease for smoother zoom.
@@ -44,7 +47,10 @@ export function useWheelZoomTuning({
       return false
     }
 
-    onScale(scaleDelta)
+    onScale(scaleDelta, {
+      clientX: event.clientX ?? 0,
+      clientY: event.clientY ?? 0,
+    })
     return true
   }
 
@@ -53,18 +59,6 @@ export function useWheelZoomTuning({
     const rawScaleDelta = -normalizedDeltaY * wheelScaleFactor
 
     return clamp(rawScaleDelta, -wheelMaxStep, wheelMaxStep)
-  }
-
-  function clamp(value: number, min: number, max: number): number {
-    if (value < min) {
-      return min
-    }
-
-    if (value > max) {
-      return max
-    }
-
-    return value
   }
 
   return {

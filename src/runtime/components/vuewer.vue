@@ -4,7 +4,10 @@
     ref="viewerRef"
     class="vuewer"
     :class="{ vuewer_hide_ui: idle }"
-    @click.self="emit('close')"
+    @pointerdown="onViewerPointerDown"
+    @pointermove="onViewerPointerMove"
+    @pointerup="onViewerPointerUp"
+    @pointercancel="onViewerPointerCancel"
   >
     <div class="vuewer__overlay" />
     <div
@@ -12,8 +15,17 @@
       @click.self="emit('close')"
     >
       <img
+        ref="activeImageRef"
         :src="currentImage?.url"
         alt=""
+        class="vuewer__active-image"
+        :class="{
+          'vuewer__active-image_state_pannable': isImagePannable,
+          'vuewer__active-image_state_dragging': isImageDragging,
+        }"
+        :style="{ transform: activeImageTransform }"
+        draggable="false"
+        @load="onActiveImageLoad"
       >
     </div>
 
@@ -81,6 +93,7 @@ import IconAngleLeft from './icons/angle-left.vue'
 import IconAngleRight from './icons/angle-right.vue'
 import VuewerZoomControls from './zoom/controls/controls.vue'
 import { useVuewerZoom } from '../composables/zoom'
+import { useVuewerPan } from '../composables/pan'
 import { useWheelZoomTuning } from '../composables/wheel-zoom-tuning'
 import { useWheelScrollTuning } from '../composables/wheel-scroll-tuning'
 
@@ -118,17 +131,19 @@ const defaultImage = computed(() => {
 })
 
 const viewerRef = ref<HTMLElement | null>(null)
+const activeImageRef = ref<HTMLImageElement | null>(null)
 const currentImage = ref<ImageItem>()
 const {
   imageScale,
   handleScale,
-  resetScale,
+  resetScale: resetZoomScale,
+  setOnScaleChange,
 } = useVuewerZoom({
   zoomableElementRef: viewerRef,
 })
 
 const { handleWheelZoom } = useWheelZoomTuning({
-  onScale: handleScale,
+  onScale: (delta, focalPoint) => handleScale(delta, focalPoint),
 })
 
 const { handleWheelScroll, resetWheelScrollState } = useWheelScrollTuning({
@@ -138,6 +153,31 @@ const { handleWheelScroll, resetWheelScrollState } = useWheelScrollTuning({
 
 const hasNonInitialZoom = computed(() => Math.abs(imageScale.value - 1) > 0.001)
 const zoomPercentage = computed(() => Math.round(imageScale.value * 100))
+const {
+  onScaleChange,
+  imageTransform: activeImageTransform,
+  isImageDragging,
+  isImagePannable,
+  onImageLoad: onActiveImageLoad,
+  onViewerPointerDown,
+  onViewerPointerMove,
+  onViewerPointerUp,
+  onViewerPointerCancel,
+  resetPan,
+} = useVuewerPan({
+  viewerRef,
+  imageRef: activeImageRef,
+  imageScale,
+})
+// Bridge zoom scale events to pan logic.
+// This keeps zoom centered around the active pointer/touch location
+// instead of always zooming around the viewport center.
+setOnScaleChange(onScaleChange)
+
+function resetScale(): void {
+  resetZoomScale()
+  resetPan()
+}
 
 function setActiveImage(imageId: number) {
   const image = imagesMap.value.get(imageId)
@@ -220,10 +260,15 @@ function onWheel(event: WheelEvent): void {
 }
 
 watch(imagesMap, (newMap) => {
-  currentImage.value ??= defaultImage.value
+  if (!currentImage.value) {
+    currentImage.value = defaultImage.value
+    resetScale()
+    return
+  }
 
   if (currentImage.value && !newMap.has(currentImage.value.id)) {
     currentImage.value = defaultImage.value
+    resetScale()
   }
 }, { immediate: true })
 
@@ -240,7 +285,6 @@ onBeforeUnmount(() => {
 
 <style scoped lang="scss">
 .vuewer {
-  --vuewer__image-scale: v-bind(imageScale);
   --vuewer__ui_opacity: 1;
 
   position: fixed;
@@ -276,7 +320,22 @@ onBeforeUnmount(() => {
     align-items: center;
     justify-content: center;
     inset: 0;
-    transform: scale(var(--vuewer__image-scale));
+  }
+
+  &__active-image {
+    transform-origin: center center;
+    will-change: transform;
+    -webkit-user-drag: none;
+
+    &_state {
+      &_pannable {
+        cursor: grab;
+      }
+
+      &_dragging {
+        cursor: grabbing;
+      }
+    }
   }
 
   &__ui {

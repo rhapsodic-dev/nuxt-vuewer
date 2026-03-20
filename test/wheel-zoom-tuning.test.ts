@@ -4,15 +4,21 @@ import { useWheelZoomTuning } from '../src/runtime/composables/wheel-zoom-tuning
 interface WheelEventInput {
   deltaY?: number
   deltaMode?: number
+  clientX?: number
+  clientY?: number
 }
 
 function createWheelEvent({
   deltaY = 0,
   deltaMode = 0,
+  clientX = 0,
+  clientY = 0,
 }: WheelEventInput): WheelEvent {
   return {
     deltaY,
     deltaMode,
+    clientX,
+    clientY,
   } as WheelEvent
 }
 
@@ -80,5 +86,31 @@ describe('useWheelZoomTuning', () => {
     expect(deltas).toHaveLength(2)
     expect(deltas[0]).toBeCloseTo(-0.2, 8)
     expect(deltas[1]).toBeCloseTo(0.2, 8)
+  })
+
+  it('forwards wheel pointer position as zoom focal point', () => {
+    const focalPoints: Array<{ clientX: number, clientY: number }> = []
+
+    const { handleWheelZoom } = useWheelZoomTuning({
+      onScale: (_delta, focalPoint) => {
+        if (focalPoint) {
+          focalPoints.push(focalPoint)
+        }
+      },
+      wheelScaleFactor: 0.01,
+      wheelMaxStep: 1,
+    })
+
+    expect(handleWheelZoom(createWheelEvent({
+      deltaY: -10,
+      clientX: 320,
+      clientY: 240,
+    }))).toBe(true)
+
+    expect(focalPoints).toHaveLength(1)
+    expect(focalPoints[0]).toEqual({
+      clientX: 320,
+      clientY: 240,
+    })
   })
 })
