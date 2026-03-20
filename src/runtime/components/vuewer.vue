@@ -399,7 +399,7 @@ onBeforeUnmount(() => {
     position: absolute;
     left: 50%;
     bottom: 25px;
-    z-index: 2;
+    z-index: 4;
     display: flex;
     flex-direction: column;
     gap: 12px;
