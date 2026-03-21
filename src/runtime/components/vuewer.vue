@@ -398,13 +398,15 @@ onBeforeUnmount(() => {
   &__navigation {
     position: absolute;
     left: 50%;
-    bottom: 25px;
+    bottom: 0;
     z-index: 4;
     display: flex;
     flex-direction: column;
     gap: 12px;
     align-items: center;
+    padding-bottom: calc(25px + env(safe-area-inset-bottom));
     opacity: var(--vuewer__ui_opacity);
+    filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
     transition: opacity .3s;
     transform: translateX(-50%);
   }
