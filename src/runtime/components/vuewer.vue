@@ -341,8 +341,6 @@ onBeforeUnmount(() => {
   inset: 0;
   z-index: 1000;
   user-select: none;
-  /* Keep native touch gestures from competing with custom viewer zoom/pan. */
-  touch-action: none;
   /* Prevent scroll chaining/bounce from leaking to the background page. */
   overscroll-behavior: contain;
 
@@ -370,6 +368,8 @@ onBeforeUnmount(() => {
     align-items: center;
     justify-content: center;
     inset: 0;
+    /* Keep native touch gestures from competing with custom viewer zoom/pan. */
+    touch-action: none;
   }
 
   &__active-image {
