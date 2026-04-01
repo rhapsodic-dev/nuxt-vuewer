@@ -36,6 +36,12 @@ export interface UseVuewerZoomOptions {
   touchListenerOptions?: AddEventListenerOptions
 }
 
+interface WebKitGestureEvent extends Event {
+  scale?: number
+  clientX?: number
+  clientY?: number
+}
+
 function getDefaultInitialScale(): number {
   return 1
 }
@@ -64,6 +70,7 @@ export function useVuewerZoom({
   const imageScale = ref(initialScale)
   const pinchStartDistance = ref<number | null>(null)
   const pinchStartScale = ref(initialScale)
+  const gestureStartScale = ref<number | null>(null)
   const scaleChangeHandlerRef = ref<typeof onScaleChange>(onScaleChange)
 
   function handleScale(delta: number, focalPoint?: ZoomFocalPoint) {
@@ -175,12 +182,66 @@ export function useVuewerZoom({
     pinchStartScale.value = imageScale.value
   }
 
-  // `gesture*` events are a non-standard WebKit API (mainly Safari on iOS/iPadOS,
-  // and Safari on macOS with trackpad gestures). We prevent the browser's default
-  // page zoom so pinch interactions stay controlled by this viewer. Chromium/Firefox
-  // browsers usually do not fire these events, so these listeners are effectively ignored there.
-  function onGesture(event: Event): void {
+  function getGestureFocalPoint(event: WebKitGestureEvent): ZoomFocalPoint | undefined {
+    if (typeof event.clientX !== 'number' || typeof event.clientY !== 'number') {
+      return undefined
+    }
+
+    return {
+      clientX: event.clientX,
+      clientY: event.clientY,
+    }
+  }
+
+  function getGestureScale(event: WebKitGestureEvent): number | null {
+    if (typeof event.scale !== 'number') return null
+    if (!Number.isFinite(event.scale) || event.scale <= 0) return null
+
+    return event.scale
+  }
+
+  function onGestureStart(event: Event): void {
     event.preventDefault()
+
+    // When a real touch pinch is active, touch handlers already own zoom math.
+    if (pinchStartDistance.value !== null) return
+
+    const webKitGestureEvent = event as WebKitGestureEvent
+    gestureStartScale.value = imageScale.value
+
+    const scale = getGestureScale(webKitGestureEvent)
+    if (scale === null) return
+
+    setScale(
+      gestureStartScale.value * scale,
+      getGestureFocalPoint(webKitGestureEvent),
+    )
+  }
+
+  // `gesture*` events are a non-standard WebKit API (mainly Safari on iOS/iPadOS,
+  // and Safari on macOS with trackpad gestures). Chromium/Firefox usually do not
+  // emit them, so these listeners are effectively ignored there.
+  function onGestureChange(event: Event): void {
+    event.preventDefault()
+
+    // Avoid double-applying scale when touch pinch is active on WebKit browsers.
+    if (pinchStartDistance.value !== null) return
+
+    const webKitGestureEvent = event as WebKitGestureEvent
+    const scale = getGestureScale(webKitGestureEvent)
+    if (scale === null) return
+
+    const baseScale = gestureStartScale.value ?? imageScale.value
+
+    setScale(
+      baseScale * scale,
+      getGestureFocalPoint(webKitGestureEvent),
+    )
+  }
+
+  function onGestureEnd(event: Event): void {
+    event.preventDefault()
+    gestureStartScale.value = null
   }
 
   function mountZoomListeners(): void {
@@ -193,9 +254,9 @@ export function useVuewerZoom({
       zoomableElement.addEventListener('touchcancel', onTouchCancel, touchListenerOptions)
     }
 
-    document.addEventListener('gesturestart', onGesture, touchListenerOptions)
-    document.addEventListener('gesturechange', onGesture, touchListenerOptions)
-    document.addEventListener('gestureend', onGesture, touchListenerOptions)
+    document.addEventListener('gesturestart', onGestureStart, touchListenerOptions)
+    document.addEventListener('gesturechange', onGestureChange, touchListenerOptions)
+    document.addEventListener('gestureend', onGestureEnd, touchListenerOptions)
   }
 
   function unmountZoomListeners(): void {
@@ -208,9 +269,9 @@ export function useVuewerZoom({
       zoomableElement.removeEventListener('touchcancel', onTouchCancel, touchListenerOptions)
     }
 
-    document.removeEventListener('gesturestart', onGesture, touchListenerOptions)
-    document.removeEventListener('gesturechange', onGesture, touchListenerOptions)
-    document.removeEventListener('gestureend', onGesture, touchListenerOptions)
+    document.removeEventListener('gesturestart', onGestureStart, touchListenerOptions)
+    document.removeEventListener('gesturechange', onGestureChange, touchListenerOptions)
+    document.removeEventListener('gestureend', onGestureEnd, touchListenerOptions)
   }
 
   onMounted(() => {
