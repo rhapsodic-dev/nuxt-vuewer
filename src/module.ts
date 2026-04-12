@@ -1,25 +1,37 @@
-import { defineNuxtModule, createResolver, addImports } from '@nuxt/kit'
-import { fileURLToPath } from 'node:url'
+import { addImports, defineNuxtModule } from '@nuxt/kit'
 
-export default defineNuxtModule({
+const PACKAGE_NAME = '@rhapsodic/vuewer'
+const PACKAGE_STYLE = `${PACKAGE_NAME}/style.css`
+
+export interface ModuleOptions {
+  css?: boolean
+  autoImport?: boolean
+}
+
+export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'nuxt-vuewer',
+    name: '@rhapsodic/nuxt-vuewer',
     configKey: 'vuewer',
     compatibility: { nuxt: '>=3.1.0 || ^4' },
   },
-  // Default configuration options of the Nuxt module
-  defaults: {},
-  setup(_options, _nuxt) {
-    const { resolve } = createResolver(import.meta.url)
-    const runtimeDir = fileURLToPath(new URL('./runtime', import.meta.url))
+  defaults: {
+    css: true,
+    autoImport: true,
+  },
+  setup(options, nuxt) {
+    if (!nuxt.options.build.transpile.includes(PACKAGE_NAME)) {
+      nuxt.options.build.transpile.push(PACKAGE_NAME)
+    }
 
-    _nuxt.options.build.transpile.push(resolve(runtimeDir))
-    _nuxt.options.css.push(resolve(runtimeDir, 'assets/global.css'))
+    if (options.css && !nuxt.options.css.includes(PACKAGE_STYLE)) {
+      nuxt.options.css.push(PACKAGE_STYLE)
+    }
 
-    addImports({
-      name: 'useVuewer',
-      as: 'useVuewer',
-      from: resolve(runtimeDir, 'composables/vuewer'),
-    })
+    if (options.autoImport) {
+      addImports({
+        name: 'useVuewer',
+        from: PACKAGE_NAME,
+      })
+    }
   },
 })

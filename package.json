@@ -62,7 +62,7 @@
     "hooks:install": "pnpm exec simple-git-hooks"
   },
   "dependencies": {
-    "@vueuse/core": "^14.2.1"
+    "@rhapsodic/vuewer": "^1.0.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",

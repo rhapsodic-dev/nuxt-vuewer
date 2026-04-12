@@ -4,13 +4,7 @@
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
 
-> Image viewer for your [Nuxt](https://nuxt.com/)️ project
-
-## Features
-
-- 💪 &nbsp;Type safe integration of Vuewer into your project
-- ✨ &nbsp;Viewing multiple or a single image
-- 🕹️ &nbsp;A `useVuewer()` composable to access all of vuewer methods.
+Nuxt module for [`@rhapsodic/vuewer`](https://github.com/rhapsodic-dev/vuewer) library.
 
 ## Quick Setup
 
@@ -20,7 +14,23 @@ Install the module to your Nuxt application with one command:
 npx nuxi module add @rhapsodic/nuxt-vuewer
 ```
 
-That's it! You can now use Vuewer in your Nuxt app ✨
+That's it! You can now use `@rhapsodic/vuewer` in your Nuxt app through this module.
+
+## Configuration
+
+Both module options are enabled by default:
+
+```ts
+export default defineNuxtConfig({
+  vuewer: {
+    css: true,
+    autoImport: true,
+  },
+})
+```
+
+- `css`: injects `@rhapsodic/vuewer/style.css` into the Nuxt app.
+- `autoImport`: registers `useVuewer()` as a Nuxt auto-import.
 
 ## Usage
 ```vue
