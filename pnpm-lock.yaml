@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@rhapsodic/vuewer':
-        specifier: ^1.0.3
-        version: 1.0.3(vue@3.5.31(typescript@6.0.2))
+        specifier: ^1.1.0
+        version: 1.1.0(vue@3.5.31(typescript@6.0.2))
     devDependencies:
       '@commitlint/cli':
         specifier: ^20.5.0
@@ -1403,8 +1403,8 @@ packages:
   '@quansync/fs@1.0.0':
     resolution: {integrity: sha512-4TJ3DFtlf1L5LDMaM6CanJ/0lckGNtJcMjQ1NAV6zDmA0tEHKZtxNKin8EgPaVX1YzljbxckyT2tJrpQKAtngQ==}
 
-  '@rhapsodic/vuewer@1.0.3':
-    resolution: {integrity: sha512-VI37wY/k24g9eovGGJd0XdLgF5FCvKYmEV7n1gsKdYDmnCR2bI7C5erchEQTKtrCTj0GYyzkawfKnZ5oyxjXGQ==}
+  '@rhapsodic/vuewer@1.1.0':
+    resolution: {integrity: sha512-AhSpznjLNkFbG9LvXkRitlzCH9QtkA+M0WigIjVlSOG/wM2VKpfaPsypuuYoHNTz8UprCW0P6mytt7qk5aQF0Q==}
     peerDependencies:
       vue: ^3.3.0
 
@@ -6281,7 +6281,7 @@ snapshots:
     dependencies:
       quansync: 1.0.0
 
-  '@rhapsodic/vuewer@1.0.3(vue@3.5.31(typescript@6.0.2))':
+  '@rhapsodic/vuewer@1.1.0(vue@3.5.31(typescript@6.0.2))':
     dependencies:
       '@vueuse/core': 14.2.1(vue@3.5.31(typescript@6.0.2))
       vue: 3.5.31(typescript@6.0.2)
