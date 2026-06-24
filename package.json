@@ -78,12 +78,12 @@
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
     "@nuxt/devtools": "^3.2.4",
-    "@nuxt/eslint-config": "^1.15.2",
-    "@nuxt/kit": "^4.4.6",
+    "@nuxt/eslint-config": "^1.16.0",
+    "@nuxt/kit": "^4.4.8",
     "@nuxt/module-builder": "^1.0.2",
-    "@nuxt/schema": "^4.4.6",
+    "@nuxt/schema": "^4.4.8",
     "@nuxt/test-utils": "^4.0.3",
-    "@types/node": "^24.12.4",
+    "@types/node": "^24.13.1",
     "bumpp": "^11.1.0",
     "eslint": "^10.4.1",
     "lint-staged": "^17.0.7",
@@ -92,7 +92,7 @@
     "simple-git-hooks": "^2.13.1",
     "typescript": "~6.0.3",
     "vitest": "^4.1.8",
-    "vue-tsc": "^3.3.3"
+    "vue-tsc": "^3.3.4"
   },
   "simple-git-hooks": {
     "commit-msg": "pnpm exec commitlint --edit",
@@ -101,5 +101,5 @@
   "lint-staged": {
     "*.{js,ts,vue}": "eslint --fix"
   },
-  "packageManager": "pnpm@11.5.0+sha512.dbfcc4f81cf48597afd4bc391ffdf12c11f1a9fb83a395bfa6b0a2d9cc2fd8ffebafdb1ccbd529632153f793904c2615b7f09fe1a345473fd1c35845172a8eb1"
+  "packageManager": "pnpm@11.5.2+sha512.71c631e382066efc25625d5cf029075de07b61b37f6e27350fbd84b1bda5864c8c1967adc280776b45c30a715c0359a3be08fef42d5bb09e2b99029979692916"
 }
