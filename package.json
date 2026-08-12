@@ -84,7 +84,7 @@
     "@nuxt/schema": "^4.5.1",
     "@nuxt/test-utils": "^4.1.0",
     "@types/node": "^24.13.3",
-    "bumpp": "^11.1.0",
+    "bumpp": "^12.1.1",
     "eslint": "^10.8.0",
     "lint-staged": "^17.2.0",
     "nuxt": "^4.5.2",
