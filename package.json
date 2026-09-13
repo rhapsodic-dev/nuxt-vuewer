@@ -90,7 +90,7 @@
     "nuxt": "^4.5.2",
     "sass": "^1.103.1",
     "simple-git-hooks": "^2.14.0",
-    "typescript": "~6.0.3",
+    "typescript": "~7.0.2",
     "vitest": "^4.1.10",
     "vue-tsc": "^3.3.11"
   },
