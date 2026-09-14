@@ -91,7 +91,7 @@
     "sass": "^1.103.1",
     "simple-git-hooks": "^2.14.0",
     "typescript": "~6.0.3",
-    "vitest": "^4.1.10",
+    "vitest": "^4.1.11",
     "vue-tsc": "^3.3.11"
   },
   "simple-git-hooks": {
